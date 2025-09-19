@@ -5,7 +5,6 @@ import pickle
 
 model, selector = pickle.load(open("trained_model.pkl", "rb"))
 
-
 def rockMine_prediction(input_data):
 
     #convert input data  into numpy and reshape it 
