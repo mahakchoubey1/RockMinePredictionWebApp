@@ -26,7 +26,7 @@ def main():
         st.markdown("Enter the values for the **selected sonar features** below:")
 
  # Get only the selected features (not all 60)
-        selected_indices = selector.get_support(indices=True)
+        #selected_indices = selector.get_support(indices=True)
         #num_inputs = 60
 
       
