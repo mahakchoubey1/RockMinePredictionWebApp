@@ -29,15 +29,16 @@ def main():
         selected_indices = selector.get_support(indices=True)
         #num_inputs = 60
 
-        input_data = []
+      
         # Store inputs in a dictionary
        # inputs = {}
         #for i in range(1, num_inputs + 1):
             #inputs[f"C{i}"] = st.number_input(f"C{i}", min_value=0.0, format="%.4f")
-        for i in selected_indices:
-            val = st.number_input(f"Feature C{i+1}", min_value=0.0, format="%.4f")
-            input_data.append(val)
-
+        num_inputs = 60
+        input_data = []
+        for i in range(num_inputs):
+            value = st.number_input(f"Feature {i+1}", value=0.0)
+            input_data.append(value)
 
         if st.button('🔍 predict'):
            # inputforlist = [st.number_input(f"C{i}", min_value=0.0, format="%.4f") for i in range(1, num_inputs + 1)]
