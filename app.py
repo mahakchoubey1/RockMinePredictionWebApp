@@ -3,39 +3,47 @@ import numpy as np
 import pandas as pd
 import pickle
 
-with open("trained_model.pkl","rb") as f:
-    model=pickle.load(f)
+model, selector = pickle.load(open("trained_model.pkl", "rb"))
+
 
 def rockMine_prediction(input_data):
 
-    #convert input data into numpy
-    input_2_numpyarray=np.asarray(input_data,dtype=float)
-    input_data_reshaped = inputdata_2_numpyarray.reshaped(1,-1)# 1=dta contain 1 row and -1 tells the aray to take all the columns from the dataset
+    #convert input data  into numpy and reshape it 
+    input_2_numpyarray = np.asarray(input_data, dtype=float).reshape(1, -1)
 
-
-    # prediction = model.predict(input_data_reshaped)
+    # prediction using the model
+    prediction = model.predict(input_data_reshaped)
 
     if prediction[0]=='R':
-        return 'the object is rock'
+        return ' 🪨 the object is rock'
     else:
-        return "the object is mine"
+        return " 💣 the object is mine"
 
 
-    # Main Function to tell the user to enter the input
+    # Main  Streamlit UI Function to tell the user to enter the input
 def main():
 
         st.title("Rock and Mine Prediction Web App")
-        num_inputs = 60
+        st.markdown("Enter the values for the **selected sonar features** below:")
 
+ # Get only the selected features (not all 60)
+        selected_indices = selector.get_support(indices=True)
+        #num_inputs = 60
+
+        input_data = []
         # Store inputs in a dictionary
-        inputs = {}
-        for i in range(1, num_inputs + 1):
-            inputs[f"C{i}"] = st.number_input(f"C{i}", min_value=0.0, format="%.4f")
+       # inputs = {}
+        #for i in range(1, num_inputs + 1):
+            #inputs[f"C{i}"] = st.number_input(f"C{i}", min_value=0.0, format="%.4f")
+        for i in selected_indices:
+        val = st.number_input(f"Feature C{i+1}", min_value=0.0, format="%.4f")
+        input_data.append(val)
 
-        if st.button('Test Results'):
-            inputforlist = [st.number_input(f"C{i}", min_value=0.0, format="%.4f") for i in range(1, num_inputs + 1)]
 
-            Result=rockMine_prediction(inputforlist)
+        if st.button('🔍 predict'):
+           # inputforlist = [st.number_input(f"C{i}", min_value=0.0, format="%.4f") for i in range(1, num_inputs + 1)]
+
+            Result=rockMine_prediction(input_data)
             st.success(Result)
 
 
