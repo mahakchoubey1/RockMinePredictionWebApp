@@ -36,8 +36,8 @@ def main():
         #for i in range(1, num_inputs + 1):
             #inputs[f"C{i}"] = st.number_input(f"C{i}", min_value=0.0, format="%.4f")
         for i in selected_indices:
-        val = st.number_input(f"Feature C{i+1}", min_value=0.0, format="%.4f")
-        input_data.append(val)
+            val = st.number_input(f"Feature C{i+1}", min_value=0.0, format="%.4f")
+            input_data.append(val)
 
 
         if st.button('🔍 predict'):
