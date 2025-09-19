@@ -4,6 +4,7 @@ import pickle
 from sklearn.metrics import accuracy_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import SelectKBest, f_classif
 
 
 #1)load daataset
@@ -17,29 +18,36 @@ X = dataset.drop(columns="C61", axis=1)
 
 # Label = last column (Rock/Mine)
 Y = dataset["C61"]
-print(X.shape)
-print(Y.unique())
+print("Shape of X:", X.shape)
+print("Unique labels:", Y.unique())
 
-X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.1,random_state=2)
-model=LogisticRegression()
+
+# 2) Feature Selection (reduce from 60 → 10 best features)
+
+selector = SelectKBest(score_func=f_classif, k=10)
+X_new = selector.fit_transform(X, Y)
+selected_features = selector.get_support(indices=True)
+print("🎯 Selected top features:", selected_features)
+
+# 3) Train-test split
+
+X_train,X_test,Y_train,Y_test=train_test_split(X_new,Y,test_size=0.1,random_state=2)
+
+# 4) Model training
+
+model=LogisticRegression(max_iter=1000)
 
 model.fit(X_train,Y_train)
 
-X_train_prediction=model.predict(X_train)
-train_accuracy=accuracy_score(Y_train,X_train_prediction)
+# 5) Evaluate model
+train_pred = model.predict(X_train)
+test_pred = model.predict(X_test)
 
-
-X_test_prediction = model.predict(X_test)
-test_accuracy=accuracy_score(Y_test,X_test_prediction)
-print(f"✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅")
-print(f" Training Accuracy{train_accuracy:.6f}")
-print(f" Testing Accuracy{test_accuracy:.6f}")
-print(f"✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅")
-#save model
+# 6) Save model + selector (so UI can use same transformation)
 with open("trained_model.pkl","wb")as f:
-    pickle.dump(model,f)
-    print("SAVED YOUR MODEL FOR DISPLAYING WEBAPP")
-print(f"✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅")
+    pickle.dump((model, selector), f)
+    print("💾 Model + feature selector saved as trained_model.pkl")
+
 
 
 
