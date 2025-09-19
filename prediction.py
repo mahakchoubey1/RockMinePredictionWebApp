@@ -44,8 +44,9 @@ train_pred = model.predict(X_train)
 test_pred = model.predict(X_test)
 
 # 6) Save model + selector (so UI can use same transformation)
-with open("trained_model.pkl","wb")as f:
+with open("trained_model.pkl", "wb") as f:
     pickle.dump((model, selector), f)
+    
     print("💾 Model + feature selector saved as trained_model.pkl")
 
 
