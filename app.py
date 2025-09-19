@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 import pickle
 
-model, selector = pickle.load(open("trained_model.pkl", "rb"))
-
+with open("trained_model.pkl", "rb") as f:
+    model = pickle.load(f)
 def rockMine_prediction(input_data):
 
     #convert input data  into numpy and reshape it 
